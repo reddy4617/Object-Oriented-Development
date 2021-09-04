@@ -1,0 +1,115 @@
+// Design of CricketScore App observer pattern .
+//Creating an Observer pattern where the Subject notifies any change in the state to the observer
+
+// The information is acquired from stadium and provided to the Class and notifies
+// display elements for the observer are PresentRunsDisplay & AverageScoreDisplay
+class CricketScore
+{
+	int TotalRuns, Totalwickets;
+	float overs;
+	PresentRunsDisplay PresentRunsDisplay;
+	AverageScoreDisplay averageScoreDisplay;
+
+	// Constructor of cricket score
+	public CricketScore(PresentRunsDisplay PresentRunsDisplay,
+					AverageScoreDisplay averageScoreDisplay)
+	{
+		this.PresentRunsDisplay = PresentRunsDisplay;
+		this.averageScoreDisplay = averageScoreDisplay;
+	}
+
+	// Get latest TotalRuns from stadium
+	private int AcquireLatestRuns()
+	{
+		// returning sample value of 98 
+		return 98;
+	}
+
+	// Get  TotalNo of wickets from Cricket stadium
+	private int AcquireLatestWickets()
+	{
+		// returning sample value of 7
+		return 7;
+	}
+
+	// Get latest overs from stadium
+	private float AcquireLatestOvers()
+	{
+		// return 10.2 for simplicity
+		return (float)10.2;
+	}
+
+	// This method is used update displays when data changes
+	public void UpdatedCricketScore()
+	{
+		// acquiring latest data
+		TotalRuns = AcquireLatestRuns();
+		Totalwickets = AcquireLatestWickets();
+		overs = AcquireLatestOvers();
+
+		PresentRunsDisplay.update(TotalRuns,Totalwickets,overs);
+		averageScoreDisplay.update(TotalRuns,Totalwickets,overs);
+	}
+}
+
+// Using a class for displaying average score. CricketScore class will Update this class data
+class AverageScoreDisplay
+{
+	private float GameRunRate;
+	private int EstimatedScore;
+
+	public void update(int TotalRuns, int Totalwickets, float overs)
+	{
+		this.GameRunRate = (float)TotalRuns/overs;
+		this.EstimatedScore = (int) (this.GameRunRate * 50);
+		display();
+	}
+
+	public void display()
+	{
+		System.out.println("\nAverage Score Display:\n" +
+						"Game Run Rate: " + GameRunRate +
+						"\nEstimated Score: " + EstimatedScore);
+	}
+}
+
+// Using a class for displaying PresentRunsDisplay. CricketScore class will Update this class data
+class PresentRunsDisplay
+{
+	private int TotalRuns, Totalwickets;
+	private float overs;
+
+	public void update(int TotalRuns,int Totalwickets,float overs)
+	{
+		this.TotalRuns = TotalRuns;
+		this.Totalwickets = Totalwickets;
+		this.overs = overs;
+		display();
+	}
+
+	public void display()
+	{
+		System.out.println("\nPresent Runs Display: \n" +
+						"TotalRuns: " + TotalRuns +"\nWickets:"
+						+ Totalwickets + "\nOvers: " + overs );
+	}
+}
+
+class Main
+{
+	public static void main(String args[])
+	{
+		// Creating objects for testing purpose
+		AverageScoreDisplay averageScoreDisplay =
+									new AverageScoreDisplay();
+		PresentRunsDisplay PresentRunsDisplay =
+									new PresentRunsDisplay();
+
+		// Pass the displays to Cricket data
+		CricketScore CricketScore = new CricketScore(PresentRunsDisplay,
+												averageScoreDisplay);
+
+	
+		CricketScore.UpdatedCricketScore();
+	}
+}
